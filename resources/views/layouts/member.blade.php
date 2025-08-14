@@ -7,6 +7,7 @@
     <title>Iseki Chadet - Chasis Detector</title>
     
     <link rel="stylesheet" href="{{ asset('assets/css/templatemo-glossy-touch.css') }}">
+    
 <!--
 
 TemplateMo 592 glossy touch
@@ -59,8 +60,8 @@ https://templatemo.com/tm-592-glossy-touch
                 </div>
                 <div class="nav-links">
                     <a href="{{ route('home') }}" class="{{ $page === 'home' ? 'active' : '' }}">Home</a>
-                    <a href="{{ route('detect') }}" class="{{ $page === 'detect' ? 'active' : '' }}">Detect</a>
-                    <a href="#" class="{{ $page === 'record' ? 'active' : '' }}">Record</a>
+                    <a href="{{ route('user') }}" class="{{ $page === 'user' ? 'active' : '' }}">user</a>
+                    <a href="{{ route('record') }}" class="{{ $page === 'record' ? 'active' : '' }}">Record</a>
                     <a href="{{ route('login') }}">Logout</a>
                 </div>
             </nav>
@@ -77,8 +78,8 @@ https://templatemo.com/tm-592-glossy-touch
                 <div class="footer-content">
                     <div class="footer-links">
                         <a href="{{ route('home') }}">Home</a>
-                        <a href="{{ route('detect') }}">Detect</a>
-                        <a href="#">Record</a>
+                        <a href="{{ route('user') }}">User</a>
+                        <a href="{{ route('record') }}">Record</a>
                     </div>
                     <div class="copyright">
                         &copy; <script>document.write(new Date().getFullYear())</script> Iseki Chadet - Chasis Detector
