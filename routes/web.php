@@ -7,6 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\DetectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\Api\RecordApiController;
 
 
 
@@ -46,11 +47,15 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy'); // Hapus user (DELETE)
     Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
 
-
-
     Route::get('/detect', [DetectController::class, 'index'])->name('detect');
     Route::get('/result', [DetectController::class, 'result'])->name('result');
     Route::post('/upload', [DetectController::class, 'upload'])->name('upload');
 
     Route::get('/record', [RecordController::class, 'index'])->name('record');
+    Route::get('/record/submit', [RecordController::class, 'submit'])->name('record.submit');
+    Route::get('/record/export', [RecordController::class, 'export'])->name('record.export');
+    Route::get('/record/reset', [RecordController::class, 'reset'])->name('record.reset');
 });
+
+Route::get('/api/records', [RecordApiController::class, 'view']);
+Route::post('/api/records/store', [RecordApiController::class, 'store']);

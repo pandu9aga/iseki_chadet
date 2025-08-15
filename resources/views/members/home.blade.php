@@ -11,7 +11,7 @@
                 <div class="hero-content">
                     <h1>Welcome to the Chadet</h1>
                     <p>A website app for detecting and recording tractor chasis number.</p>
-                    <a href="{{ route('detect') }}" class="cta-button">Detect Now</a>
+                    {{-- <a href="{{ route('detect') }}" class="cta-button">Detect Now</a> --}}
                 </div>
             </section>
         </div>

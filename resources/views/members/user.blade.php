@@ -2,7 +2,7 @@
 
 @section('style')
     <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/jquery.dataTables.min.css') }}" />
 
     <style>
         /* Header dan isi tabel rata tengah vertikal dan horizontal */
@@ -11,9 +11,12 @@
             min-width: 90px;
             padding-left: 0.8rem;
             padding-right: 0.8rem;
+            padding-top: 3px;
+            padding-bottom: 3px;
             text-align: center;
             white-space: nowrap;
             color: #fff !important;
+            font-size: 14px !important;
             /* tulisan putih */
         }
 
@@ -58,7 +61,7 @@
                             <button type="button" class="btn btn-primary btn-sm glass btn-add"
                                 onclick="window.location='{{ route('user.create') }}'">Add User</button>
                         </div>
-
+                        <br>
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered align-middle text-center" id="dataTable"
                                 width="100%" cellspacing="0">
@@ -109,10 +112,10 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {

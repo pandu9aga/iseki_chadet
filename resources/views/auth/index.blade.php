@@ -46,7 +46,7 @@
                             <input name="Password_User" type="password" class="form-control" placeholder="Password"
                                 required />
                         </div>
-                        <div class="col-md-5 col-sm-5 col-xs-5 mb-3 d-flex align-items-center gap-2">
+                        <div class="col-md-7 col-sm-7 col-xs-7 mb-3 d-flex align-items-center gap-2">
                             <button type="submit" class="tm-btn-subscribe btn btn-primary w-100">
                                 Login
                             </button>

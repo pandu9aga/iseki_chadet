@@ -60,7 +60,7 @@ https://templatemo.com/tm-592-glossy-touch
                 </div>
                 <div class="nav-links">
                     <a href="{{ route('home') }}" class="{{ $page === 'home' ? 'active' : '' }}">Home</a>
-                    <a href="{{ route('user') }}" class="{{ $page === 'user' ? 'active' : '' }}">user</a>
+                    <a href="{{ route('user') }}" class="{{ $page === 'user' ? 'active' : '' }}">User</a>
                     <a href="{{ route('record') }}" class="{{ $page === 'record' ? 'active' : '' }}">Record</a>
                     <a href="{{ route('login') }}">Logout</a>
                 </div>
