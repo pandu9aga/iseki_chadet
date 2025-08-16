@@ -169,6 +169,27 @@
         background: rgba(255, 255, 255, 0.3);
     }
 
+    .badge-ok {
+        background-color: #28a745; /* hijau */
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+    }
+
+    .badge-ng {
+        background-color: #dc3545; /* merah */
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+    }
+
+    .badge-default {
+        background-color: #6c757d; /* abu-abu */
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+    }
+
 </style>
 @endsection
 
@@ -239,8 +260,7 @@
                                     <th style="width: 20%;">No Chasis Cheksheet</th>
                                     <th style="width: 20%;">No Chasis Scan</th>
                                     <th style="width: 20%;">Time Record</th>
-                                    <th style="width: 20%;">Status</th>
-                                    
+                                    <th style="width: 20%;">Status</th>          
                                 </tr>
                             </thead>
                             
@@ -252,8 +272,16 @@
                                     <td class="text-wrap">{{ $record->No_Chasis_Kanban }}</td>
                                     <td class="text-wrap">{{ $record->No_Chasis_Scan }}</td>
                                     <td class="text-wrap">{{ $record->Time }}</td>
-                                    <td class="text-wrap">{{ $record->Status_Record}}</td>
-                                    
+                                    <td class="text-wrap">
+                                        @php
+                                            $statusClass = '';
+                                            if ($record->Status_Record === 'OK') $statusClass = 'badge-ok';
+                                            elseif ($record->Status_Record === 'NG') $statusClass = 'badge-ng';
+                                            else $statusClass = 'badge-default';
+                                        @endphp
+
+                                        <span class="{{ $statusClass }}">{{ $record->Status_Record }}</span>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

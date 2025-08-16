@@ -16,10 +16,11 @@ class RecordApiController extends Controller
             'No_Produksi'      => 'required|string|max:255',
             'No_Chasis_Kanban' => 'nullable|string|max:255',
             'No_Chasis_Scan'   => 'nullable|string|max:255',
-            'Time'             => 'required|date_format:Y-m-d H:i:s',
             'Status_Record'    => 'required|string|max:50',
         ]);
 
+        $validated['Time'] = now();
+        
         // Insert or Update berdasarkan No_Produksi
         $record = Record::updateOrCreate(
             ['No_Produksi' => $validated['No_Produksi']], // kondisi pencarian

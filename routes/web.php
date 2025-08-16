@@ -7,7 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\DetectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RecordController;
-use App\Http\Controllers\Api\RecordApiController;
+// use App\Http\Controllers\Api\RecordApiController;
 
 
 
@@ -57,5 +57,5 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::get('/record/reset', [RecordController::class, 'reset'])->name('record.reset');
 });
 
-Route::get('/api/records', [RecordApiController::class, 'view']);
-Route::post('/api/records/store', [RecordApiController::class, 'store']);
+// Route::get('/api/records', [RecordApiController::class, 'view']);
+// Route::post('/api/records/store', [RecordApiController::class, 'store']);
