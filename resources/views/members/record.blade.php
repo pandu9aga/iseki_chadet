@@ -15,7 +15,8 @@
         padding-bottom: 3px;
         text-align: center;
         white-space: nowrap;
-        color: #fff !important;
+        background: #F7418F;
+        color: white !important;
         font-size: 14px !important;
         /* tulisan putih */
     }
@@ -152,7 +153,7 @@
         border: 1px solid rgba(255, 255, 255, 0.4);
         border-radius: 8px;
         padding: 8px 12px;
-        color: white;
+        color: #2b2b2b;
         font-size: 14px;
         outline: none;
         transition: all 0.2s ease-in-out;
@@ -183,6 +184,13 @@
         border-radius: 12px;
     }
 
+    .badge-approved {
+        background-color: #e7972e; /* oranye */
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+    }
+
     .badge-default {
         background-color: #6c757d; /* abu-abu */
         color: white;
@@ -201,7 +209,7 @@
                 <div class="contact-map glass p-4 shadow-sm rounded">
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h2>Data Record</h2>
+                        <h2 class="text-white">Data Record</h2>
                     </div>
                     <div>
                         <div>
@@ -252,8 +260,8 @@
                     </div>
                     <br>
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered align-middle text-center" id="dataTable" width="100%" cellspacing="0">
-                            <thead class="table-primary">
+                        <table class="table table-striped table-bordered align-middle text-center custom-striped" id="dataTable" width="100%" cellspacing="0">
+                            <thead class="table-primary text-white bg-primary">
                                 <tr>
                                     <th style="width: 5%;">No</th>
                                     <th style="width: 20%;">No Instruksi</th>
@@ -277,19 +285,57 @@
                                             $statusClass = '';
                                             if ($record->Status_Record === 'OK') $statusClass = 'badge-ok';
                                             elseif ($record->Status_Record === 'NG') $statusClass = 'badge-ng';
-                                            else $statusClass = 'badge-default';
+                                            elseif ($record->Status_Record === 'NG-Approved') $statusClass = 'badge-approved';
                                         @endphp
 
-                                        <span class="{{ $statusClass }}">{{ $record->Status_Record }}</span>
+                                        @if ($record->Status_Record === 'NG')
+                                            <span class="{{ $statusClass }} clickable-badge"
+                                                data-kanban="{{ $record->No_Chasis_Kanban }}"
+                                                data-scan="{{ $record->No_Chasis_Scan }}"
+                                                data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
+                                                data-id="{{ $record->Id_Record }}"
+                                                data-status="{{ $record->Status_Record }}">
+                                                {{ $record->Status_Record }}
+                                            </span>
+                                        @elseif ($record->Status_Record === 'NG-Approved')
+                                            <span class="{{ $statusClass }} clickable-badge"
+                                                data-kanban="{{ $record->No_Chasis_Kanban }}"
+                                                data-scan="{{ $record->No_Chasis_Scan }}"
+                                                data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
+                                                data-id="{{ $record->Id_Record }}"
+                                                data-status="{{ $record->Status_Record }}">
+                                                NG-OK
+                                            </span>
+                                        @else
+                                            <span class="{{ $statusClass }}">{{ $record->Status_Record }}</span>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </section>
+        </div>
+    </div>
+</div>
+<div id="ngDetailModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <div class="custom-modal-header">
+            <h5>NG Record Detail</h5>
+            <span class="custom-modal-close" onclick="closeModal('ngDetailModal')">&times;</span>
+        </div>
+        <div class="custom-modal-body">
+            <p><strong>No Chasis Kanban:</strong> <span id="modalKanban"></span></p>
+            <p><strong>No Chasis Scan:</strong> <span id="modalScan"></span></p>
+            <div id="modalPhotoWrapper">
+                <img id="modalPhoto" src="" alt="NG Photo" style="max-width:100%;border-radius:8px;"/>
+            </div>
+        </div>
+        <div class="custom-modal-footer">
+            <button class="btn-secondary" onclick="closeModal('ngDetailModal')">Close</button>
+            <button id="approveBtn" class="btn-danger">Approve</button>
         </div>
     </div>
 </div>
@@ -329,5 +375,55 @@ window.onclick = function(event) {
         }
     });
 }
+
+$(document).ready(function() {
+    // Klik badge NG
+    $(document).on("click", ".clickable-badge", function() {
+        let kanban = $(this).data("kanban");
+        let scan   = $(this).data("scan");
+        let photo  = $(this).data("photo");
+        let id     = $(this).data("id");
+        let status = $(this).data("status");
+
+        $("#modalKanban").text(kanban);
+        $("#modalScan").text(scan);
+
+        if (photo) {
+            $("#modalPhoto").attr("src", photo).show();
+        } else {
+            $("#modalPhoto").hide();
+        }
+
+        // Kalau NG → tombol Approve tampil
+        if (status === "NG") {
+            $("#approveBtn").show().data("id", id);
+        } 
+        // Kalau NG-Approved → tombol Approve disembunyikan
+        else if (status === "NG-Approved") {
+            $("#approveBtn").hide();
+        }
+
+        openModal("ngDetailModal");
+    });
+
+    // Klik Approve
+    $("#approveBtn").on("click", function() {
+        let id = $(this).data("id");
+
+        $.ajax({
+            url: "./record/approve/" + id,
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(res) {
+                location.reload();
+            },
+            error: function(xhr) {
+                alert("Approvement failed");
+            }
+        });
+    });
+});
 </script>
 @endsection

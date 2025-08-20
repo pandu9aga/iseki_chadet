@@ -18,27 +18,39 @@ https://templatemo.com/tm-592-glossy-touch
 }
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    /* background: #FFF3C7; */
     background: linear-gradient(
         135deg,
-        #170013 0%,
-        #5b1142 15%,
-        #601a55 35%,
-        #9a2082 50%,
-        #c13bba 70%,
-        #ce67bc 85%,
-        #f6a5e0 100%
-
-        /* #0c0c0c 0%,
-        #1a1a2e 15%,
-        #16213e 35%,
-        #0f3460 50%,
-        #533a7d 70%,
-        #8b5a8c 85%,
-        #a0616a 100% */
+        /* #FC819E 0%, */
+        #FEC7B4 0%,
+        #FFF3C7 100%
     );
     min-height: 100vh;
     overflow-x: hidden;
 }
+
+.text-white {
+    color: #FFFFFF !important;
+}
+
+.bg-primary {
+    background-color: #F7418F !important;
+}
+
+/* Custom striped */
+.custom-striped tbody tr:nth-of-type(odd) {
+    background-color: #FEC7B4; /* baris ganjil */
+}
+
+.custom-striped tbody tr:nth-of-type(even) {
+    background-color: #FC819E; /* baris genap */
+}
+
+/* Biar text tetap terbaca */
+.custom-striped tbody tr td {
+    color: #000; /* hitam */
+}
+
 /* Animated background elements */
 .bg-shapes {
     position: fixed;
@@ -121,9 +133,9 @@ body {
 }
 /* Glass container styles */
 .glass {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgb(252, 129, 158);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(252, 129, 158, 0.8);
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
@@ -131,7 +143,7 @@ body {
     overflow: hidden;
 }
 .glass:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(252, 129, 158, 0.8);
     transform: translateY(-5px);
     box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
 }
@@ -182,7 +194,7 @@ nav {
     gap: 30px;
 }
 .nav-links a {
-    color: rgba(255, 255, 255, 0.9);
+    color: white;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
@@ -244,7 +256,7 @@ nav {
 }
 .hero p {
     font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: white;
     margin-bottom: 30px;
     line-height: 1.6;
 }
@@ -298,7 +310,7 @@ button[type="submit"] {
     color: white;
 }
 .feature-card p {
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
     line-height: 1.6;
 }
 /* About page styles */
@@ -321,7 +333,7 @@ button[type="submit"] {
 .about-text p {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: rgba(255, 255, 255, 0.9);
+    color: white;
     margin-bottom: 20px;
 }
 .stats {
@@ -343,7 +355,7 @@ button[type="submit"] {
 }
 .stat-label {
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
     margin-top: 10px;
 }
 /* Team section styles */
@@ -403,7 +415,7 @@ button[type="submit"] {
 .team-member .bio {
     font-size: 0.9rem;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
     margin-bottom: 20px;
 }
 .team-social {
@@ -419,7 +431,7 @@ button[type="submit"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
     text-decoration: none;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
@@ -463,7 +475,7 @@ button[type="submit"] {
     color: white;
 }
 .service-card p {
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
     line-height: 1.6;
     margin-bottom: 20px;
 }
@@ -480,7 +492,7 @@ button[type="submit"] {
     content: "✓";
     position: absolute;
     left: 0;
-    color: rgba(255, 255, 255, 0.9);
+    color: white;
 }
 /* Contact page styles */
 .contact-grid {
@@ -506,7 +518,7 @@ button[type="submit"] {
 }
 .form-group label {
     display: block;
-    color: rgba(255, 255, 255, 0.9);
+    color: white;
     margin-bottom: 8px;
     font-weight: 500;
 }
@@ -569,11 +581,11 @@ button[type="submit"] {
     margin-bottom: 5px;
 }
 .contact-item-text p {
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
 }
 .contact-map {
     padding: 40px;
-    color: white;
+    color: #2b2b2b;
     width: 100%;
 }
 .contact-map h2 {
@@ -599,7 +611,7 @@ button[type="submit"] {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
     text-align: center;
 }
 .map-placeholder-icon {
@@ -647,7 +659,7 @@ button[type="submit"] {
 .footer-content {
     padding: 30px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.8);
+    color: white;
 }
 .footer-links {
     display: flex;

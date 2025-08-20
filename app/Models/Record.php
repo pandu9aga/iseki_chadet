@@ -17,5 +17,6 @@ class Record extends Model
         'No_Chasis_Scan',
         'Time',
         'Status_Record',
+        'Photo_Ng_Path'
     ];
 }

@@ -9,6 +9,34 @@ use Illuminate\Http\Request;
 
 class RecordApiController extends Controller
 {
+    // public function store(Request $request)
+    // {
+    //     // Validasi input
+    //     $validated = $request->validate([
+    //         'No_Produksi'      => 'required|string|max:255',
+    //         'No_Chasis_Kanban' => 'nullable|string|max:255',
+    //         'No_Chasis_Scan'   => 'nullable|string|max:255',
+    //         'Status_Record'    => 'required|string|max:50',
+    //     ]);
+
+    //     $validated['Time'] = now();
+        
+    //     // Insert or Update berdasarkan No_Produksi
+    //     $record = Record::updateOrCreate(
+    //         ['No_Produksi' => $validated['No_Produksi']], // kondisi pencarian
+    //         $validated // data yang diupdate/insert
+    //     );
+
+    //     // Kembalikan respons JSON
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => $record->wasRecentlyCreated
+    //             ? 'Record created successfully'
+    //             : 'Record updated successfully',
+    //         'data' => $record
+    //     ], $record->wasRecentlyCreated ? 201 : 200);
+    // }
+
     public function store(Request $request)
     {
         // Validasi input
@@ -17,17 +45,23 @@ class RecordApiController extends Controller
             'No_Chasis_Kanban' => 'nullable|string|max:255',
             'No_Chasis_Scan'   => 'nullable|string|max:255',
             'Status_Record'    => 'required|string|max:50',
+            'Photo_Ng_Path'    => 'nullable|file|image', // max 2MB
         ]);
 
         $validated['Time'] = now();
-        
+
+        // Kalau ada file foto
+        if ($request->hasFile('Photo_Ng_Path')) {
+            $path = $request->file('Photo_Ng_Path')->store('ng_photos', 'uploads');
+            $validated['Photo_Ng_Path'] = $path;
+        }
+
         // Insert or Update berdasarkan No_Produksi
         $record = Record::updateOrCreate(
-            ['No_Produksi' => $validated['No_Produksi']], // kondisi pencarian
-            $validated // data yang diupdate/insert
+            ['No_Produksi' => $validated['No_Produksi']], 
+            $validated
         );
 
-        // Kembalikan respons JSON
         return response()->json([
             'success' => true,
             'message' => $record->wasRecentlyCreated

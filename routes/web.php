@@ -55,6 +55,8 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::get('/record/submit', [RecordController::class, 'submit'])->name('record.submit');
     Route::get('/record/export', [RecordController::class, 'export'])->name('record.export');
     Route::get('/record/reset', [RecordController::class, 'reset'])->name('record.reset');
+    Route::post('/record/approve/{Id_Record}', [RecordController::class, 'approve'])->name('record.approve');
+
 });
 
 // Route::get('/api/records', [RecordApiController::class, 'view']);

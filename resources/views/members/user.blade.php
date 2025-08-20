@@ -15,7 +15,7 @@
             padding-bottom: 3px;
             text-align: center;
             white-space: nowrap;
-            color: #fff !important;
+            color: white; !important;
             font-size: 14px !important;
             /* tulisan putih */
         }
@@ -25,6 +25,7 @@
             min-width: 80px;
             padding-left: 0.6rem;
             padding-right: 0.6rem;
+            background: #F7418F;
         }
 
         /* Tombol Add User biasanya lebih besar, bisa diberi class khusus */
@@ -32,6 +33,7 @@
             min-width: 110px;
             padding-left: 1.2rem;
             padding-right: 1.2rem;
+            background: #F7418F;
         }
 
         #dataTable thead th,
@@ -56,16 +58,16 @@
                     <div class="contact-map glass p-4 shadow-sm rounded">
 
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h2>Data User</h2>
+                            <h2 class="text-white">Data User</h2>
                             <!-- Tombol sekarang jadi link ke halaman create -->
                             <button type="button" class="btn btn-primary btn-sm glass btn-add"
                                 onclick="window.location='{{ route('user.create') }}'">Add User</button>
                         </div>
                         <br>
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered align-middle text-center" id="dataTable"
+                            <table class="table table-striped table-bordered align-middle text-center custom-striped" id="dataTable"
                                 width="100%" cellspacing="0">
-                                <thead class="table-primary">
+                                <thead class="table-primary text-white bg-primary">
                                     <tr>
                                         <th style="width: 5%;">No</th>
                                         <th style="width: 20%;">Username</th>

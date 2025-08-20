@@ -59,6 +59,9 @@ class RecordController extends Controller
         // Isi data
         $row = 2;
         foreach ($records as $index => $record) {
+            // Ganti NG-Approved jadi NG-OK
+            $statusText = $record->Status_Record === 'NG-Approved' ? 'NG-OK' : $record->Status_Record;
+
             // Tambahkan data ke Excel
             $sheet->fromArray([
                 $index + 1,
@@ -66,14 +69,18 @@ class RecordController extends Controller
                 $record->No_Chasis_Kanban,
                 $record->No_Chasis_Scan,
                 Carbon::parse($record->Time)->format('d-m-Y H:i:s'),
-                $record->Status_Record
+                $statusText
             ], NULL, 'A' . $row);
 
-            // Set warna dan tebal untuk "Correct" & "Incorrect"
+            // Set warna dan tebal untuk status
             $correctnessCell = 'F' . $row;
             if ($record->Status_Record === 'OK') {
                 $sheet->getStyle($correctnessCell)->applyFromArray([
                     'font' => ['bold' => true, 'color' => ['rgb' => '008000']] // Hijau
+                ]);
+            } elseif ($record->Status_Record === 'NG-Approved') {
+                $sheet->getStyle($correctnessCell)->applyFromArray([
+                    'font' => ['bold' => true, 'color' => ['rgb' => 'de7e00']] // Oranye
                 ]);
             } else {
                 $sheet->getStyle($correctnessCell)->applyFromArray([
@@ -98,6 +105,21 @@ class RecordController extends Controller
     public function reset(){
         Record::truncate();
         return redirect()->route('record');
+    }
+
+    public function approve($Id_Record)
+    {
+        $record = Record::findOrFail($Id_Record);
+        if ($record->Status_Record === "NG") {
+            $record->Status_Record = "NG-Approved";
+            $record->save();
+        }
+
+        return response()->json([
+            "success" => true,
+            "message" => "Record approved",
+            "data" => $record
+        ]);
     }
 }
 
