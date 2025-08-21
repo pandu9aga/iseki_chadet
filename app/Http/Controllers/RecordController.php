@@ -18,7 +18,7 @@ class RecordController extends Controller
         $page = 'record';
 
         $date = Carbon::today();
-        $records = Record::whereDate('Time', $date)->get();
+        $records = Record::whereDate('Time', $date)->with('user')->get();
 
         $date = Carbon::parse($date)->isoFormat('YYYY-MM-DD');
 
@@ -29,7 +29,7 @@ class RecordController extends Controller
         $page = 'record';
 
         $date = $request->input('Day_Record');
-        $records = Record::whereDate('Time', $date)->get();
+        $records = Record::whereDate('Time', $date)->with('user')->get();
 
         $date = Carbon::parse($date)->isoFormat('YYYY-MM-DD');
 
@@ -39,14 +39,14 @@ class RecordController extends Controller
     public function export(Request $request) {
         $date = $request->input('Day_Record_Hidden');
         $date = Carbon::parse($date)->format('Y-m-d H:i:s');
-        $records = Record::whereDate('Time', $date)->get();
+        $records = Record::whereDate('Time', $date)->with('user')->get();
 
         // Buat Spreadsheet
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Header kolom
-        $headers = ['No', 'No Instruksi', 'No Chasis Cheksheet', 'No Chasis Scan', 'Time Record', 'Status'];
+        // Header kolom (tambahkan Approved By)
+        $headers = ['No', 'No Instruksi', 'No Chasis Cheksheet', 'No Chasis Scan', 'Time Record', 'Status', 'Approved By'];
         $sheet->fromArray([$headers], NULL, 'A1');
 
         // Style header (tebal & background abu-abu)
@@ -54,13 +54,16 @@ class RecordController extends Controller
             'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
             'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '4F4F4F']]
         ];
-        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
+        $sheet->getStyle('A1:G1')->applyFromArray($headerStyle);
 
         // Isi data
         $row = 2;
         foreach ($records as $index => $record) {
             // Ganti NG-Approved jadi NG-OK
             $statusText = $record->Status_Record === 'NG-Approved' ? 'NG-OK' : $record->Status_Record;
+
+            // Ambil nama user, kalau null kasih ""
+            $approvedBy = $record->user->Name_User ?? '';
 
             // Tambahkan data ke Excel
             $sheet->fromArray([
@@ -69,7 +72,8 @@ class RecordController extends Controller
                 $record->No_Chasis_Kanban,
                 $record->No_Chasis_Scan,
                 Carbon::parse($record->Time)->format('d-m-Y H:i:s'),
-                $statusText
+                $statusText,
+                $approvedBy
             ], NULL, 'A' . $row);
 
             // Set warna dan tebal untuk status
@@ -112,6 +116,7 @@ class RecordController extends Controller
         $record = Record::findOrFail($Id_Record);
         if ($record->Status_Record === "NG") {
             $record->Status_Record = "NG-Approved";
+            $record->Id_User = session('login_id');
             $record->save();
         }
 

@@ -70,7 +70,7 @@
         background: rgba(255, 255, 255, 0.2); /* transparan */
         backdrop-filter: blur(15px); /* efek blur kaca */
         border-radius: 12px;
-        width: 400px;
+        width: 600px;
         max-width: 90%;
         overflow: hidden;
         animation: slideDown 0.3s ease forwards;
@@ -101,6 +101,8 @@
 
     /* Body */
     .custom-modal-body {
+        max-height: 70vh;   /* batasi tinggi modal body, misalnya 70% layar */
+        overflow-y: auto;   /* aktifkan scroll vertical */
         padding: 15px;
         color: white;
     }
@@ -198,6 +200,19 @@
         border-radius: 12px;
     }
 
+    .row {
+        display: flex;
+        margin-bottom: 5px;
+    }
+    
+    .row .label {
+        width: 150px; /* bisa disesuaikan */
+        font-weight: bold;
+    }
+
+    .row .value {
+        flex: 1;
+    }
 </style>
 @endsection
 
@@ -294,7 +309,8 @@
                                                 data-scan="{{ $record->No_Chasis_Scan }}"
                                                 data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
                                                 data-id="{{ $record->Id_Record }}"
-                                                data-status="{{ $record->Status_Record }}">
+                                                data-status="{{ $record->Status_Record }}"
+                                                data-user="">
                                                 {{ $record->Status_Record }}
                                             </span>
                                         @elseif ($record->Status_Record === 'NG-Approved')
@@ -303,7 +319,8 @@
                                                 data-scan="{{ $record->No_Chasis_Scan }}"
                                                 data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
                                                 data-id="{{ $record->Id_Record }}"
-                                                data-status="{{ $record->Status_Record }}">
+                                                data-status="{{ $record->Status_Record }}"
+                                                data-user="{{ $record->user->Name_User }}">
                                                 NG-OK
                                             </span>
                                         @else
@@ -327,8 +344,19 @@
             <span class="custom-modal-close" onclick="closeModal('ngDetailModal')">&times;</span>
         </div>
         <div class="custom-modal-body">
-            <p><strong>No Chasis Kanban:</strong> <span id="modalKanban"></span></p>
-            <p><strong>No Chasis Scan:</strong> <span id="modalScan"></span></p>
+            <div class="row">
+                <div class="label">No Chasis Kanban:</div>
+                <div class="value" id="modalKanban"></div>
+            </div>
+            <div class="row">
+                <div class="label">No Chasis Scan:</div>
+                <div class="value" id="modalScan"></div>
+            </div>
+            <div class="row">
+                <div class="label">Approved By:</div>
+                <div class="value" id="modalUser"></div>
+            </div>
+            <br>
             <div id="modalPhotoWrapper">
                 <img id="modalPhoto" src="" alt="NG Photo" style="max-width:100%;border-radius:8px;"/>
             </div>
@@ -381,12 +409,14 @@ $(document).ready(function() {
     $(document).on("click", ".clickable-badge", function() {
         let kanban = $(this).data("kanban");
         let scan   = $(this).data("scan");
+        let user   = $(this).data("user");
         let photo  = $(this).data("photo");
         let id     = $(this).data("id");
         let status = $(this).data("status");
 
         $("#modalKanban").text(kanban);
         $("#modalScan").text(scan);
+        $("#modalUser").text(user);
 
         if (photo) {
             $("#modalPhoto").attr("src", photo).show();

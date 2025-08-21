@@ -17,6 +17,12 @@ class Record extends Model
         'No_Chasis_Scan',
         'Time',
         'Status_Record',
-        'Photo_Ng_Path'
+        'Photo_Ng_Path',
+        'Id_User'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'Id_User', 'Id_User');
+    }
 }
