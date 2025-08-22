@@ -441,7 +441,7 @@ $(document).ready(function() {
         let id = $(this).data("id");
 
         $.ajax({
-            url: "./record/approve/" + id,
+            url: "http://192.168.173.207/iseki_chadet/public/record/approve/" + id,
             type: "POST",
             data: {
                 _token: "{{ csrf_token() }}"
