@@ -456,8 +456,20 @@ window.onclick = function(event) {
 }
 
 function highlightDiff(checksheet, scan) {
+    // pastikan bukan null/undefined
+    if (typeof checksheet !== "string") checksheet = checksheet ? String(checksheet) : "";
+    if (typeof scan !== "string") scan = scan ? String(scan) : "";
+
     const m = checksheet.length;
     const n = scan.length;
+
+    // kalau salah satu kosong → langsung render sederhana
+    // if (m === 0 || n === 0) {
+    //     $("#modalKanban").text(checksheet || "-");
+    //     $("#modalScan").text(scan || "-");
+    //     $("#modalSimilarity").text("0%");
+    //     return;
+    // }
 
     // DP table untuk edit distance alignment
     let dp = Array.from({length: m+1}, () => Array(n+1).fill(0));
