@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Record;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class RecordApiController extends Controller
 {
@@ -38,6 +40,52 @@ class RecordApiController extends Controller
     // }
 
     public function store(Request $request)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'No_Produksi'      => 'required|string|max:255',
+            'No_Chasis_Kanban' => 'nullable|string|max:255',
+            'No_Chasis_Scan'   => 'nullable|string|max:255',
+            'Status_Record'    => 'required|string|max:50',
+            'Photo_Ng_Path'    => 'nullable|file|image', // max 2MB
+        ]);
+
+        $validated['Time'] = now();
+        $data = $validated;
+
+        // === HANDLE FILE UPLOAD ===
+        if ($request->hasFile('Photo_Ng_Path')) {
+            $file = $request->file('Photo_Ng_Path');
+
+            // Generate nama acak 40 karakter dengan ekstensi asli
+            $randomName = Str::random(40) . '.' . $file->getClientOriginalExtension();
+
+            // Simpan di disk 'uploads' dalam folder 'ng_photos'
+            $path = $file->storeAs('ng_photos', $randomName, 'uploads');
+
+            // Masukkan ke data untuk disimpan di DB
+            $data['Photo_Ng_Path'] = $path;
+        } else {
+            unset($data['Photo_Ng_Path']);
+        }
+
+        // === UPDATE / INSERT RECORD ===
+        $record = Record::updateOrCreate(
+            ['No_Produksi' => $data['No_Produksi']],
+            $data
+        );
+
+        // === RESPON JSON ===
+        return response()->json([
+            'success' => true,
+            'message' => $record->wasRecentlyCreated
+                ? 'Record created successfully'
+                : 'Record updated successfully',
+            'data' => $record
+        ], $record->wasRecentlyCreated ? 201 : 200);
+    }
+
+    public function storeold(Request $request)
     {
         // Validasi input
         $validated = $request->validate([
