@@ -69,6 +69,89 @@ class RecordApiController extends Controller
             unset($data['Photo_Ng_Path']);
         }
 
+        $processName = 'chadet';
+
+        // --- LOGIKA UPDATE RECORD DI DATABASE PODIUM LANGSUNG ---
+        // --- PERUBAHAN: Format sequence_no ---
+        // Format No_Tractor_Record ke 5 digit dengan leading zero
+        // Misal: "6731" -> "06731", "1" -> "00001", "12345" -> "12345"
+        $sequenceNoFormatted = str_pad($request->No_Produksi, 5, '0', STR_PAD_LEFT);
+        $timestamp = $now->format('Y-m-d H:i:s');
+
+        try {
+            // 1. Cari plan di database PODIUM berdasarkan Sequence_No_Plan (dengan format yang disesuaikan)
+            $plan = DB::connection('podium')->table('plans')->where('Sequence_No_Plan', $sequenceNoFormatted)->first();
+            if (!$plan) {
+                return back()->withErrors(['general' => "Plan dengan Sequence_No_Plan '{$sequenceNoFormatted}' tidak ditemukan di sistem PODIUM."]);
+            }
+
+            $modelName = $plan->Model_Name_Plan;
+
+            // 2. Cari rule di database PODIUM berdasarkan Type_Rule = Model_Name_Plan
+            $rule = DB::connection('podium')->table('rules')->where('Type_Rule', $modelName)->first();
+            if (!$rule) {
+                return back()->withErrors(['general' => "Rule untuk model '{$modelName}' tidak ditemukan di sistem PODIUM."]);
+            }
+
+            // 3. Decode Rule_Rule
+            $ruleSequence = json_decode($rule->Rule_Rule, true);
+            if (!is_array($ruleSequence)) {
+                return back()->withErrors(['general' => "Format rule untuk model '{$modelName}' rusak."]);
+            }
+
+            // 4. Cek apakah process_name ada dalam rule
+            $position = null;
+            foreach ($ruleSequence as $key => $process) {
+                if ($process === $processName) {
+                    $position = (int)$key;
+                    break;
+                }
+            }
+
+            if ($position === null) {
+                return back()->withErrors(['general' => "Proses '{$processName}' tidak termasuk dalam rule untuk model '{$modelName}'."]);
+            }
+
+            // 5. Decode Record_Plan
+            $record = [];
+            if ($plan->Record_Plan) {
+                $decodedRecord = json_decode($plan->Record_Plan, true);
+                if (is_array($decodedRecord)) {
+                    $record = $decodedRecord;
+                }
+                // Jika tidak array atau null, biarkan $record tetap array kosong
+            }
+
+            // 6. Cek apakah proses sebelumnya sudah dilakukan
+            $previousProcessesDone = true;
+            $missingPrevious = [];
+            for ($i = 1; $i < $position; $i++) {
+                $prevProcess = $ruleSequence[$i] ?? null;
+                if ($prevProcess && !isset($record[$prevProcess])) {
+                    $previousProcessesDone = false;
+                    $missingPrevious[] = $prevProcess;
+                }
+            }
+
+            if (!$previousProcessesDone) {
+                return back()->withErrors(['general' => "Proses sebelumnya belum selesai: " . implode(', ', $missingPrevious)]);
+            }
+
+            // 7. Update record: tambahkan proses dan timestamp
+            $record[$processName] = $timestamp;
+
+            // 8. Simpan kembali ke database PODIUM
+            DB::connection('podium')->table('plans')
+                ->where('Id_Plan', $plan->Id_Plan)
+                ->update(['Record_Plan' => json_encode($record, JSON_UNESCAPED_UNICODE)]);
+
+            // Logika berhasil dihilangkan, bisa ditambahkan jika perlu
+
+        } catch (\Exception $e) {
+            // Jika terjadi exception saat update database PODIUM
+            return back()->withErrors(['general' => 'Gagal mencatat ke sistem PODIUM: ' . $e->getMessage()]);
+        }
+
         // === UPDATE / INSERT RECORD ===
         $record = Record::updateOrCreate(
             ['No_Produksi' => $data['No_Produksi']],
