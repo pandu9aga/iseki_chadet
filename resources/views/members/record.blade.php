@@ -364,6 +364,16 @@
                                                 data-user="{{ $record->user->Name_User }}">
                                                 NG-OK
                                             </span>
+                                        @elseif ($record->Status_Record === 'OK')
+                                            <span class="{{ $statusClass }} clickable-badge"
+                                                data-kanban="{{ $record->No_Chasis_Kanban }}"
+                                                data-scan="{{ $record->No_Chasis_Scan }}"
+                                                data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
+                                                data-id="{{ $record->Id_Record }}"
+                                                data-status="{{ $record->Status_Record }}"
+                                                data-user="">
+                                                {{ $record->Status_Record }}
+                                            </span>
                                         @else
                                             <span class="{{ $statusClass }}">{{ $record->Status_Record }}</span>
                                         @endif
@@ -428,13 +438,20 @@
 
 <script>
 $(document).ready(function() {
-    $('#dataTable').DataTable({
-        autoWidth: false,
-        columnDefs: [
-            { width: "5%", targets: 0 },
-            { width: "20%", targets: [1,2,3,4] }
-        ],
-    });
+    var table;
+
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+        table = $('#dataTable').DataTable();
+        table.page.len(100).draw(); // ✅ paksa default 100
+    } else {
+        table = $('#dataTable').DataTable({
+            pageLength: 100,
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ]
+        });
+    }
 });
 
 function openModal(id) {
@@ -558,22 +575,25 @@ $(document).ready(function() {
 
         $("#modalUser").text(user);
 
+        // Tampilkan gambar jika ada, sembunyikan jika tidak ada
         if (photo) {
             $("#modalPhoto").attr("src", photo).show();
         } else {
-            $("#modalPhoto").hide();
+            $("#modalPhoto").hide(); // Sembunyikan elemen img jika tidak ada foto
         }
 
+        // Tampilkan/sembunyikan tombol approve berdasarkan status
         if (status === "NG") {
             $("#approveBtn").show().data("id", id);
-        } else if (status === "NG-Approved") {
+        } else {
+            // Untuk OK atau NG-Approved, sembunyikan tombol approve
             $("#approveBtn").hide();
         }
 
         openModal("ngDetailModal");
     });
 
-    // Klik Approve
+    // Klik Approve (hanya muncul untuk status NG)
     $("#approveBtn").on("click", function() {
         let id = $(this).data("id");
 

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class RecordApiController extends Controller
 {
@@ -39,7 +40,7 @@ class RecordApiController extends Controller
     //     ], $record->wasRecentlyCreated ? 201 : 200);
     // }
 
-    public function store(Request $request)
+    public function storenew(Request $request)
     {
         // Validasi input
         $validated = $request->validate([
@@ -168,7 +169,7 @@ class RecordApiController extends Controller
         ], $record->wasRecentlyCreated ? 201 : 200);
     }
 
-    public function storeold(Request $request)
+    public function store(Request $request)
     {
         // Validasi input
         $validated = $request->validate([
@@ -186,6 +187,79 @@ class RecordApiController extends Controller
             $path = $request->file('Photo_Ng_Path')->store('ng_photos', 'uploads');
             $validated['Photo_Ng_Path'] = $path;
         }
+
+        // Insert or Update berdasarkan No_Produksi
+        $record = Record::updateOrCreate(
+            ['No_Produksi' => $validated['No_Produksi']], 
+            $validated
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => $record->wasRecentlyCreated
+                ? 'Record created successfully'
+                : 'Record updated successfully',
+            'data' => $record
+        ], $record->wasRecentlyCreated ? 201 : 200);
+    }
+    
+    public function storeResize(Request $request)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'No_Produksi'      => 'required|string|max:255',
+            'No_Chasis_Kanban' => 'nullable|string|max:255',
+            'No_Chasis_Scan'   => 'nullable|string|max:255',
+            'Status_Record'    => 'required|string|max:50',
+            'Photo_Ng_Path'    => 'nullable|file|image|mimes:jpeg,png,jpg,gif|max:10240', // Validasi ukuran awal opsional, misalnya 10MB
+        ]);
+
+        $validated['Time'] = now();
+
+        // Kalau ada file foto
+        if ($request->hasFile('Photo_Ng_Path')) {
+            $uploadedFile = $request->file('Photo_Ng_Path');
+
+            // Baca file sebagai image Intervention
+            $image = Image::make($uploadedFile);
+
+            // Set kualitas awal untuk kompresi
+            $quality = 80; // Mulai dari 80, bisa disesuaikan
+
+            // Loop untuk menyesuaikan ukuran file
+            $compressedImageBinary = null;
+            do {
+                // Encode gambar ke binary string dengan kualitas tertentu
+                $compressedImageBinary = $image->encode('jpg', $quality); // Selalu encode ke jpg untuk ukuran yang lebih kecil
+                $sizeInKB = strlen($compressedImageBinary) / 1024; // Ukuran dalam KB
+
+                // Jika ukuran sudah di bawah 1024 KB (1MB), keluar dari loop
+                if ($sizeInKB <= 1024) {
+                    break;
+                }
+
+                // Jika belum, kurangi kualitas dan coba lagi
+                $quality -= 5; // Kurangi kualitas sebesar 5
+
+                // Jika kualitas terlalu rendah, hentikan untuk mencegah infinite loop
+                if ($quality < 10) {
+                    // Log::warning('Image compression stopped due to low quality threshold reached for No_Produksi: ' . $validated['No_Produksi']);
+                    break;
+                }
+            } while ($sizeInKB > 1024);
+
+            // Simpan file yang sudah dikompres ke dalam storage
+            // Generate nama file unik
+            $fileName = 'ng_photos/' . $validated['No_Produksi'] . '_' . time() . '.jpg'; // Gunakan .jpg
+            $disk = 'uploads'; // Disk yang digunakan
+
+            // Simpan binary string ke disk
+            Storage::disk($disk)->put($fileName, $compressedImageBinary);
+
+            // Simpan path ke dalam validated data
+            $validated['Photo_Ng_Path'] = $fileName;
+        }
+
 
         // Insert or Update berdasarkan No_Produksi
         $record = Record::updateOrCreate(
