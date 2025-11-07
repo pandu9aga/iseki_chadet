@@ -80,7 +80,7 @@ class RecordApiController extends Controller
         // Format No_Tractor_Record ke 5 digit dengan leading zero
         // Misal: "6731" -> "06731", "1" -> "00001", "12345" -> "12345"
         $sequenceNoFormatted = str_pad($request->No_Produksi, 5, '0', STR_PAD_LEFT);
-        $timestamp = $now->format('Y-m-d H:i:s');
+        $timestamp = $validated['Time']->format('Y-m-d H:i:s');
 
         try {
             // 1. Cari plan di database PODIUM berdasarkan Sequence_No_Plan (dengan format yang disesuaikan)

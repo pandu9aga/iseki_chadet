@@ -321,6 +321,7 @@
                                 <tr>
                                     <th style="width: 5%;">No</th>
                                     <th style="width: 20%;">No Instruksi</th>
+                                    <th style="width: 20%;">Type</th>
                                     <th style="width: 20%;">No Chasis Cheksheet</th>
                                     <th style="width: 20%;">No Chasis Scan</th>
                                     <th style="width: 20%;">Time Record</th>
@@ -333,6 +334,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td class="text-wrap">{{ $record->No_Produksi }}</td>
+                                    <td class="text-wrap">{{ $record->plan->Type_Plan }}</td>
                                     <td class="text-wrap">{{ $record->No_Chasis_Kanban }}</td>
                                     <td class="text-wrap">{{ $record->No_Chasis_Scan }}</td>
                                     <td class="text-wrap">{{ $record->Time }}</td>
@@ -346,6 +348,7 @@
 
                                         @if ($record->Status_Record === 'NG')
                                             <span class="{{ $statusClass }} clickable-badge"
+                                                data-type="{{ $record->plan->Type_Plan }}"
                                                 data-kanban="{{ $record->No_Chasis_Kanban }}"
                                                 data-scan="{{ $record->No_Chasis_Scan }}"
                                                 data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
@@ -356,6 +359,7 @@
                                             </span>
                                         @elseif ($record->Status_Record === 'NG-Approved')
                                             <span class="{{ $statusClass }} clickable-badge"
+                                                data-type="{{ $record->plan->Type_Plan }}"
                                                 data-kanban="{{ $record->No_Chasis_Kanban }}"
                                                 data-scan="{{ $record->No_Chasis_Scan }}"
                                                 data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
@@ -366,6 +370,7 @@
                                             </span>
                                         @elseif ($record->Status_Record === 'OK')
                                             <span class="{{ $statusClass }} clickable-badge"
+                                                data-type="{{ $record->plan->Type_Plan }}"
                                                 data-kanban="{{ $record->No_Chasis_Kanban }}"
                                                 data-scan="{{ $record->No_Chasis_Scan }}"
                                                 data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
@@ -398,6 +403,10 @@
             <div class="content-modal-wrapper">
                 <!-- Bagian kiri (teks) -->
                 <div class="text-section">
+                    <div class="row">
+                        <div class="label">Type:</div>
+                        <div class="value" id="modalType"></div>
+                    </div>
                     <div class="row">
                         <div class="label">No Chasis Kanban:</div>
                         <div class="value chassis-compare" id="modalKanban"></div>
@@ -563,6 +572,7 @@ function highlightDiff(checksheet, scan) {
 $(document).ready(function() {
     // Klik badge NG
     $(document).on("click", ".clickable-badge", function() {
+        let type = $(this).data("type") || "";
         let kanban = $(this).data("kanban") || "";
         let scan   = $(this).data("scan") || "";
         let user   = $(this).data("user") || "";
@@ -573,6 +583,7 @@ $(document).ready(function() {
         // highlight perbedaan
         highlightDiff(kanban, scan);
 
+        $("#modalType").text(type);
         $("#modalUser").text(user);
 
         // Tampilkan gambar jika ada, sembunyikan jika tidak ada
