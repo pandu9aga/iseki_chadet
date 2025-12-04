@@ -294,9 +294,9 @@
                             </button>
                         </form>
 
-                        <button class="glass btn btn-sm" type="button" onclick="openModal('resetReportModal')">
+                        {{-- <button class="glass btn btn-sm" type="button" onclick="openModal('resetReportModal')">
                             Reset Report
-                        </button>
+                        </button> --}}
                     </div>
                     <div id="resetReportModal" class="custom-modal">
                         <div class="custom-modal-content">
