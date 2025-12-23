@@ -16,6 +16,7 @@ class Record extends Model
 
     protected $fillable = [
         'No_Produksi',
+        'Tgl_Produksi',
         'No_Chasis_Kanban',
         'No_Chasis_Scan',
         'Time',

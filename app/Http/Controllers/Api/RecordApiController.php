@@ -48,6 +48,7 @@ class RecordApiController extends Controller
         // Validasi input
         $validated = $request->validate([
             'No_Produksi'      => 'required|string|max:255',
+            'Tgl_Produksi' => 'nullable|string|max:255',
             'No_Chasis_Kanban' => 'nullable|string|max:255',
             'No_Chasis_Scan'   => 'nullable|string|max:255',
             'Status_Record'    => 'required|string|max:50',
@@ -80,11 +81,16 @@ class RecordApiController extends Controller
         // Format No_Tractor_Record ke 5 digit dengan leading zero
         // Misal: "6731" -> "06731", "1" -> "00001", "12345" -> "12345"
         $sequenceNoFormatted = str_pad($request->No_Produksi, 5, '0', STR_PAD_LEFT);
+        $dateProduction = $data['Tgl_Produksi'] ?? null;
         $timestamp = $validated['Time']->format('Y-m-d H:i:s');
 
         try {
             // 1. Cari plan di database PODIUM berdasarkan Sequence_No_Plan (dengan format yang disesuaikan)
-            $plan = DB::connection('podium')->table('plans')->where('Sequence_No_Plan', $sequenceNoFormatted)->first();
+            $plan = DB::connection('podium')
+                        ->table('plans')
+                        ->where('Sequence_No_Plan', $sequenceNoFormatted)
+                        ->where('Production_Date_Plan', $dateProduction)
+                        ->first();
             if (!$plan) {
                 return response()->json([
                     'success' => false,
@@ -207,7 +213,10 @@ class RecordApiController extends Controller
 
         // === UPDATE / INSERT RECORD ===
         $record = Record::updateOrCreate(
-            ['No_Produksi' => $data['No_Produksi']],
+            [
+                'No_Produksi' => $data['No_Produksi'],
+                'Tgl_Produksi' => $data['Tgl_Produksi'] ?? null
+            ],
             $data
         );
 
@@ -226,6 +235,7 @@ class RecordApiController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'sequence_no' => 'required|string',
+                'date_production' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
@@ -237,11 +247,17 @@ class RecordApiController extends Controller
 
             $sequenceNo = $request->input('sequence_no');
             $sequenceNoFormatted = str_pad($sequenceNo, 5, '0', STR_PAD_LEFT);
+            $dateProduction = $request->input('date_production', null);
 
             // Log::info("CheckPrerequisites called for sequence: $sequenceNoFormatted");
 
             // 1. Cari plan di database PODIUM
-            $plan = DB::connection('podium')->table('plans')->where('Sequence_No_Plan', $sequenceNoFormatted)->first();
+            $plan = DB::connection('podium')
+                        ->table('plans')
+                        ->where('Sequence_No_Plan', $sequenceNoFormatted)
+                        ->where('Production_Date_Plan', $dateProduction)
+                        ->first();
+                        
             if (!$plan) {
                 return response()->json([
                     'success' => false,
