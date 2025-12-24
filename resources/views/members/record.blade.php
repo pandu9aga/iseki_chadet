@@ -320,12 +320,13 @@
                             <thead class="table-primary text-white bg-primary">
                                 <tr>
                                     <th style="width: 5%;">No</th>
-                                    <th style="width: 20%;">No Instruksi</th>
-                                    <th style="width: 20%;">Type</th>
+                                    <th style="width: 10%;">Production Date</th>
+                                    <th style="width: 10%;">No Instruksi</th>
+                                    <th style="width: 5%;">Type</th>
                                     <th style="width: 20%;">No Chasis Cheksheet</th>
                                     <th style="width: 20%;">No Chasis Scan</th>
                                     <th style="width: 20%;">Time Record</th>
-                                    <th style="width: 20%;">Status</th>          
+                                    <th style="width: 5%;">Status</th>          
                                 </tr>
                             </thead>
                             
@@ -333,6 +334,7 @@
                                  @foreach ($records as $record)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td class="text-wrap">{{ $record->Tgl_Produksi ?? '' }}</td>
                                     <td class="text-wrap">{{ $record->No_Produksi }}</td>
                                     <td class="text-wrap">{{ $record->plan->Type_Plan }}</td>
                                     <td class="text-wrap">{{ $record->No_Chasis_Kanban }}</td>
