@@ -247,7 +247,7 @@ class RecordApiController extends Controller
 
             $sequenceNo = $request->input('sequence_no');
             $sequenceNoFormatted = str_pad($sequenceNo, 5, '0', STR_PAD_LEFT);
-            $dateProduction = $request->input('date_production', null);
+            $dateProduction = $request->input('date_production');
 
             // Log::info("CheckPrerequisites called for sequence: $sequenceNoFormatted");
 
@@ -261,7 +261,7 @@ class RecordApiController extends Controller
             if (!$plan) {
                 return response()->json([
                     'success' => false,
-                    'message' => "Plan dengan Sequence_No_Plan '{$sequenceNoFormatted}' tidak ditemukan di sistem PODIUM."
+                    'message' => "Plan dengan Sequence_No_Plan '{$sequenceNoFormatted}' dan Production_Date_Plan '{$dateProduction}' tidak ditemukan di sistem PODIUM."
                 ], 404);
             }
 
