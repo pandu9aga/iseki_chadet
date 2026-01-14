@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{asset('assets/img/favicon.png')}}">
-    <title>Iseki Chadet - Chasis Detector</title>
+    <title>AI Number - Chasis Detector</title>
     
     <link rel="stylesheet" href="{{ asset('assets/css/templatemo-glossy-touch.css') }}">
     
@@ -56,7 +56,7 @@ https://templatemo.com/tm-592-glossy-touch
                             <circle cx="40" cy="40" r="1" opacity="0.6"/>
                         </svg>
                     </div>
-                    <span>Iseki Chadet</span>
+                    <span>AI Number Chasis</span>
                 </div>
                 <div class="nav-links">
                     <a href="{{ route('home') }}" class="{{ $page === 'home' ? 'active' : '' }}">Home</a>

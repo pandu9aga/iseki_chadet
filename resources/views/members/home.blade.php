@@ -9,7 +9,7 @@
                     <img src="{{ asset('assets/img/img-home.jpg') }}" alt="Detection Process Image" />
                 </div>
                 <div class="hero-content">
-                    <h1>Welcome to the Chadet</h1>
+                    <h1>Welcome to the AI Number Chasis Detector</h1>
                     <p>A website app for detecting and recording tractor chasis number.</p>
                     {{-- <a href="{{ route('detect') }}" class="cta-button">Detect Now</a> --}}
                 </div>

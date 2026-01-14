@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}" />
-    <title>Iseki Chadet - Chasis Detector</title>
+    <title>AI Number - Chasis Detector</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}" />
@@ -31,7 +31,7 @@
         <div class="row cb-slideshow-text-container">
             <div class="tm-content col-xl-6 col-sm-8 col-xs-8 ml-auto section">
                 <header class="mb-5">
-                    <h1>Chadet</h1>
+                    <h1>AI Number</h1>
                 </header>
                 <p class="mb-5">Tractor Chasis Number Detector</p>
 
