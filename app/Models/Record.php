@@ -37,7 +37,7 @@ class Record extends Model
 
         $noProduksi5Digit = str_pad($noProduksi, 5, '0', STR_PAD_LEFT);
 
-        $plan = Plan::whereRaw('LPAD(?, 5, "0") = Sequence_No_Plan', [$noProduksi])
+        $plan = Plan::whereRaw('LPAD(?, 5, "0") = Sequence_No_Plan', [$noProduksi5Digit])
                     ->where('Production_Date_Plan', $tglProduksi)
                     ->first();
 
