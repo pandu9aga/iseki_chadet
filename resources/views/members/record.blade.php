@@ -336,7 +336,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td class="text-wrap">{{ $record->Tgl_Produksi ?? '' }}</td>
                                     <td class="text-wrap">{{ $record->No_Produksi }}</td>
-                                    <td class="text-wrap">{{ $record->plan->Type_Plan }}</td>
+                                    <td class="text-wrap">{{ $record->plan->Type_Plan ?? '' }}</td>
                                     <td class="text-wrap">{{ $record->No_Chasis_Kanban }}</td>
                                     <td class="text-wrap">{{ $record->No_Chasis_Scan }}</td>
                                     <td class="text-wrap">{{ $record->Time }}</td>
@@ -350,7 +350,7 @@
 
                                         @if ($record->Status_Record === 'NG')
                                             <span class="{{ $statusClass }} clickable-badge"
-                                                data-type="{{ $record->plan->Type_Plan }}"
+                                                data-type="{{ $record->plan->Type_Plan ?? '' }}"
                                                 data-kanban="{{ $record->No_Chasis_Kanban }}"
                                                 data-scan="{{ $record->No_Chasis_Scan }}"
                                                 data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
@@ -361,7 +361,7 @@
                                             </span>
                                         @elseif ($record->Status_Record === 'NG-Approved')
                                             <span class="{{ $statusClass }} clickable-badge"
-                                                data-type="{{ $record->plan->Type_Plan }}"
+                                                data-type="{{ $record->plan->Type_Plan ?? '' }}"
                                                 data-kanban="{{ $record->No_Chasis_Kanban }}"
                                                 data-scan="{{ $record->No_Chasis_Scan }}"
                                                 data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
@@ -372,7 +372,7 @@
                                             </span>
                                         @elseif ($record->Status_Record === 'OK')
                                             <span class="{{ $statusClass }} clickable-badge"
-                                                data-type="{{ $record->plan->Type_Plan }}"
+                                                data-type="{{ $record->plan->Type_Plan ?? '' }}"
                                                 data-kanban="{{ $record->No_Chasis_Kanban }}"
                                                 data-scan="{{ $record->No_Chasis_Scan }}"
                                                 data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
