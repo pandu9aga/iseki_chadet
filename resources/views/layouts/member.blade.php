@@ -71,6 +71,7 @@ https://templatemo.com/tm-592-glossy-touch
                     <a href="{{ route('home') }}" class="{{ $page === 'home' ? 'active' : '' }}">Home</a>
                     <a href="{{ route('user') }}" class="{{ $page === 'user' ? 'active' : '' }}">User</a>
                     <a href="{{ route('record') }}" class="{{ $page === 'record' ? 'active' : '' }}">Record</a>
+                    <a href="{{ route('record.ng') }}" class="{{ $page === 'record_ng' ? 'active' : '' }}">NG Record</a>
                     <a href="{{ route('login') }}">Logout</a>
                 </div>
             </nav>
@@ -89,6 +90,7 @@ https://templatemo.com/tm-592-glossy-touch
                         <a href="{{ route('home') }}">Home</a>
                         <a href="{{ route('user') }}">User</a>
                         <a href="{{ route('record') }}">Record</a>
+                        <a href="{{ route('record.ng') }}">NG Record</a>
                     </div>
                     <div class="copyright">
                         &copy; <script>document.write(new Date().getFullYear())</script> Iseki Chadet - Chasis Detector

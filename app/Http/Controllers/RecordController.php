@@ -25,6 +25,15 @@ class RecordController extends Controller
         return view('members.record', compact('page', 'records', 'date'));
     }
 
+    public function ng_index()
+    {
+        $page = 'record_ng';
+
+        $records = Record::where('Status_Record', 'NG')->with('user')->get();
+
+        return view('members.ng_record', compact('page', 'records'));
+    }
+
     public function submit(Request $request){
         $page = 'record';
 

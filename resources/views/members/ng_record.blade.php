@@ -176,29 +176,6 @@
         to { transform: translateY(0); opacity: 1; }
     }
 
-    input[type="date"] {
-        background: rgba(255, 255, 255, 0.2); /* transparan putih */
-        backdrop-filter: blur(10px); /* efek glass */
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        border-radius: 8px;
-        padding: 8px 12px;
-        color: #2b2b2b;
-        font-size: 14px;
-        outline: none;
-        transition: all 0.2s ease-in-out;
-    }
-
-    /* Placeholder dan ikon kalender jadi putih */
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(1); /* membuat ikon jadi putih */
-    }
-
-    /* Saat fokus */
-    input[type="date"]:focus {
-        border-color: rgba(255, 255, 255, 0.7);
-        background: rgba(255, 255, 255, 0.3);
-    }
-
     .badge-ok {
         background-color: #28a745; /* hijau */
         color: white;
@@ -265,56 +242,9 @@
                 <div class="contact-map glass p-4 shadow-sm rounded">
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h2 class="text-white">Data Record</h2>
+                        <h2 class="text-white">Data Record NG (Unvalidated)</h2>
                     </div>
-                    <div>
-                        <div>
-                            Choose Day
-                        </div>
-                        <form class="user" action="{{ route('record.submit') }}" method="GET">
-                            @csrf
-                            <span>
-                                <span>
-                                    <input name="Day_Record" type="date" value="{{ $date }}" required>
-                                </span>
-                                <span>
-                                    <button class="glass btn btn-sm" type="submit">
-                                        Apply
-                                    </button>
-                                </span>
-                            </span>
-                        </form>
-                    </div>
-                    <br>
-                    <div class="button-container">
-                        <form action="{{ route('record.export') }}" method="GET" target="_blank">
-                            <input name="Day_Record_Hidden" type="hidden" value="{{ $date }}">
-                            <button class="glass btn btn-sm" type="submit">
-                                Download Report
-                            </button>
-                        </form>
-
-                        {{-- <button class="glass btn btn-sm" type="button" onclick="openModal('resetReportModal')">
-                            Reset Report
-                        </button> --}}
-                    </div>
-                    <div id="resetReportModal" class="custom-modal">
-                        <div class="custom-modal-content">
-                            <div class="custom-modal-header">
-                                <h5>Reset Confirmation?</h5>
-                                <span class="custom-modal-close" onclick="closeModal('resetReportModal')">&times;</span>
-                            </div>
-                            <div class="custom-modal-body">
-                                <p>Are you sure to reset records?</p>
-                                <p>This action cannot be returned!</p>
-                            </div>
-                            <div class="custom-modal-footer">
-                                <button class="btn-secondary" onclick="closeModal('resetReportModal')">Cancel</button>
-                                <a class="btn-danger" href="{{ route('record.reset') }}">Reset</a>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
+                    
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered align-middle text-center custom-striped" id="dataTable" width="100%" cellspacing="0">
                             <thead class="table-primary text-white bg-primary">
@@ -341,49 +271,16 @@
                                     <td class="text-wrap">{{ $record->No_Chasis_Scan }}</td>
                                     <td class="text-wrap">{{ $record->Time }}</td>
                                     <td class="text-wrap">
-                                        @php
-                                            $statusClass = '';
-                                            if ($record->Status_Record === 'OK') $statusClass = 'badge-ok';
-                                            elseif ($record->Status_Record === 'NG') $statusClass = 'badge-ng';
-                                            elseif ($record->Status_Record === 'NG-Approved') $statusClass = 'badge-approved';
-                                        @endphp
-
-                                        @if ($record->Status_Record === 'NG')
-                                            <span class="{{ $statusClass }} clickable-badge"
-                                                data-type="{{ $record->plan->Type_Plan ?? '' }}"
-                                                data-kanban="{{ $record->No_Chasis_Kanban }}"
-                                                data-scan="{{ $record->No_Chasis_Scan }}"
-                                                data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
-                                                data-id="{{ $record->Id_Record }}"
-                                                data-status="{{ $record->Status_Record }}"
-                                                data-user="">
-                                                {{ $record->Status_Record }}
-                                            </span>
-                                        @elseif ($record->Status_Record === 'NG-Approved')
-                                            <span class="{{ $statusClass }} clickable-badge"
-                                                data-type="{{ $record->plan->Type_Plan ?? '' }}"
-                                                data-kanban="{{ $record->No_Chasis_Kanban }}"
-                                                data-scan="{{ $record->No_Chasis_Scan }}"
-                                                data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
-                                                data-id="{{ $record->Id_Record }}"
-                                                data-status="{{ $record->Status_Record }}"
-                                                data-user="{{ $record->user->Name_User }}">
-                                                NG-OK
-                                            </span>
-                                        @elseif ($record->Status_Record === 'OK')
-                                            <span class="{{ $statusClass }} clickable-badge"
-                                                data-type="{{ $record->plan->Type_Plan ?? '' }}"
-                                                data-kanban="{{ $record->No_Chasis_Kanban }}"
-                                                data-scan="{{ $record->No_Chasis_Scan }}"
-                                                data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
-                                                data-id="{{ $record->Id_Record }}"
-                                                data-status="{{ $record->Status_Record }}"
-                                                data-user="">
-                                                {{ $record->Status_Record }}
-                                            </span>
-                                        @else
-                                            <span class="{{ $statusClass }}">{{ $record->Status_Record }}</span>
-                                        @endif
+                                        <span class="badge-ng clickable-badge"
+                                            data-type="{{ $record->plan->Type_Plan ?? '' }}"
+                                            data-kanban="{{ $record->No_Chasis_Kanban }}"
+                                            data-scan="{{ $record->No_Chasis_Scan }}"
+                                            data-photo="{{ asset('uploads/'.$record->Photo_Ng_Path) }}"
+                                            data-id="{{ $record->Id_Record }}"
+                                            data-status="{{ $record->Status_Record }}"
+                                            data-user="">
+                                            {{ $record->Status_Record }}
+                                        </span>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -453,7 +350,7 @@ $(document).ready(function() {
 
     if ($.fn.DataTable.isDataTable('#dataTable')) {
         table = $('#dataTable').DataTable();
-        table.page.len(100).draw(); // ✅ paksa default 100
+        table.page.len(100).draw();
     } else {
         table = $('#dataTable').DataTable({
             pageLength: 100,
@@ -484,34 +381,24 @@ window.onclick = function(event) {
 }
 
 function highlightDiff(checksheet, scan) {
-    // pastikan bukan null/undefined
     if (typeof checksheet !== "string") checksheet = checksheet ? String(checksheet) : "";
     if (typeof scan !== "string") scan = scan ? String(scan) : "";
 
     const m = checksheet.length;
     const n = scan.length;
 
-    // kalau salah satu kosong → langsung render sederhana
-    // if (m === 0 || n === 0) {
-    //     $("#modalKanban").text(checksheet || "-");
-    //     $("#modalScan").text(scan || "-");
-    //     $("#modalSimilarity").text("0%");
-    //     return;
-    // }
-
-    // DP table untuk edit distance alignment
     let dp = Array.from({length: m+1}, () => Array(n+1).fill(0));
     let path = Array.from({length: m+1}, () => Array(n+1).fill(''));
 
-    for (let i=0; i<=m; i++) dp[i][0] = i, path[i][0] = 'U'; // delete
-    for (let j=0; j<=n; j++) dp[0][j] = j, path[0][j] = 'L'; // insert
+    for (let i=0; i<=m; i++) dp[i][0] = i, path[i][0] = 'U';
+    for (let j=0; j<=n; j++) dp[0][j] = j, path[0][j] = 'L';
     path[0][0] = '';
 
     for (let i=1; i<=m; i++) {
         for (let j=1; j<=n; j++) {
             if (checksheet[i-1] === scan[j-1]) {
                 dp[i][j] = dp[i-1][j-1];
-                path[i][j] = 'D'; // match
+                path[i][j] = 'D';
             } else {
                 let del = dp[i-1][j] + 1;
                 let ins = dp[i][j-1] + 1;
@@ -531,7 +418,6 @@ function highlightDiff(checksheet, scan) {
         }
     }
 
-    // Backtrack untuk highlight
     let i = m, j = n;
     let checkArr = [], scanArr = [];
     while (i > 0 || j > 0) {
@@ -545,13 +431,10 @@ function highlightDiff(checksheet, scan) {
             }
             i--; j--;
         } else if (i>0 && path[i][j] === 'U') {
-            // karakter di checksheet tidak ada di scan → scan kekurangan → isi "-"
             checkArr.unshift(`<span class="diff">${checksheet[i-1]}</span>`);
             scanArr.unshift(`<span class="diff">-</span>`);
             i--;
         } else if (j>0 && path[i][j] === 'L') {
-            // karakter berlebih di scan → tampilkan di scan, tapi jangan tambahkan "-" di checksheet
-            // checkArr.unshift(`<span class="diff">-</span>`);
             scanArr.unshift(`<span class="diff">${scan[j-1]}</span>`);
             j--;
         } else {
@@ -559,20 +442,16 @@ function highlightDiff(checksheet, scan) {
         }
     }
 
-    // Hitung similarity berdasarkan Levenshtein
     let distance = dp[m][n];
     let maxLen = Math.max(m, n);
     let similarity = maxLen > 0 ? ((1 - distance / maxLen) * 100).toFixed(2) : 0;
 
     $("#modalKanban").html(checkArr.join(''));
     $("#modalScan").html(scanArr.join(''));
-
-    // tampilkan similarity
     $("#modalSimilarity").text(similarity + "%");
 }
 
 $(document).ready(function() {
-    // Klik badge NG
     $(document).on("click", ".clickable-badge", function() {
         let type = $(this).data("type") || "";
         let kanban = $(this).data("kanban") || "";
@@ -582,31 +461,26 @@ $(document).ready(function() {
         let id     = $(this).data("id");
         let status = $(this).data("status");
 
-        // highlight perbedaan
         highlightDiff(kanban, scan);
 
         $("#modalType").text(type);
         $("#modalUser").text(user);
 
-        // Tampilkan gambar jika ada, sembunyikan jika tidak ada
         if (photo) {
             $("#modalPhoto").attr("src", photo).show();
         } else {
-            $("#modalPhoto").hide(); // Sembunyikan elemen img jika tidak ada foto
+            $("#modalPhoto").hide();
         }
 
-        // Tampilkan/sembunyikan tombol approve berdasarkan status
         if (status === "NG") {
             $("#approveBtn").show().data("id", id);
         } else {
-            // Untuk OK atau NG-Approved, sembunyikan tombol approve
             $("#approveBtn").hide();
         }
 
         openModal("ngDetailModal");
     });
 
-    // Klik Approve (hanya muncul untuk status NG)
     $("#approveBtn").on("click", function() {
         let id = $(this).data("id");
 

@@ -52,6 +52,7 @@ Route::middleware([AuthMiddleware::class])->group(function () {
     Route::post('/upload', [DetectController::class, 'upload'])->name('upload');
 
     Route::get('/record', [RecordController::class, 'index'])->name('record');
+    Route::get('/ng-record', [RecordController::class, 'ng_index'])->name('record.ng');
     Route::get('/record/submit', [RecordController::class, 'submit'])->name('record.submit');
     Route::get('/record/export', [RecordController::class, 'export'])->name('record.export');
     Route::get('/record/reset', [RecordController::class, 'reset'])->name('record.reset');
