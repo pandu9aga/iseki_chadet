@@ -5,6 +5,15 @@
     <title>Laravel Paddle OCR</title>
     @vite(['resources/js/app.js'])
     <script>var Module;</script>
+
+    <!-- Dynamic Favicon -->
+    <script src="/iseki_pro_app/js/dynamic-favicon.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function() { setDynamicFavicon("pin", "AI Number"); });</script>
+
+    <!-- Dynamic Favicon Assets -->
+    <link rel="stylesheet" href="/iseki_pro_app/css/icon.css">
+    <script src="/iseki_pro_app/js/dynamic-favicon.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function() { setDynamicFavicon("pin", "AI Number"); });</script>
 </head>
 <body>
     <h1>Upload Gambar</h1>

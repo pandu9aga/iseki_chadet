@@ -27,7 +27,16 @@ Template Re-distribution is NOT allowed.
   
   <script type="text/javascript" src="{{ asset('assets/js/modernizr.custom.86080.js') }}"></script>
 		
-	</head>
+	
+    <!-- Dynamic Favicon -->
+    <script src="/iseki_pro_app/js/dynamic-favicon.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function() { setDynamicFavicon("pin", "AI Number"); });</script>
+
+    <!-- Dynamic Favicon Assets -->
+    <link rel="stylesheet" href="/iseki_pro_app/css/icon.css">
+    <script src="/iseki_pro_app/js/dynamic-favicon.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function() { setDynamicFavicon("pin", "AI Number"); });</script>
+</head>
 
 	<body>
 
